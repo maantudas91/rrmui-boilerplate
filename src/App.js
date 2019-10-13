@@ -1,26 +1,30 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { connect } from 'react-redux';
+import HelmetContainer from './HelmetSeo/HelmetContainer.js';
 
-function App() {
+import Hello from './Components/Hello.js';
+import Error404 from './Components/Error404.js';
+
+function App({title, tags}) {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+    <HelmetContainer title={title} tags={tags}/>
+    <Router>
+      <div className="App">
+        <Switch>
+          <Route exact path="/" component={Hello} />
+          <Route exact path="/Home" component={Hello} />
+          <Route component={Error404}/>
+        </Switch>
+      </div>
+    </Router>
+    </>
   );
 }
 
-export default App;
+const mapState = state => ({
+  title:state.seo.title,
+  tags:state.seo.tags
+})
+export default connect(mapState)(App);
